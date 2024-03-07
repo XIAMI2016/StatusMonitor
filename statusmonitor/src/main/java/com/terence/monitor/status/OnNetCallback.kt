@@ -2,9 +2,9 @@ package com.terence.monitor.status
 
 interface OnNetCallback {
 
-    fun onAvailable()
+    fun onNetAvailable()
 
-    fun onLost()
+    fun onNetLost()
 
-    fun onNetworkTypeChanged(old : NetType, new : NetType)
+    fun onNetTypeChanged(old : NetType, new : NetType)
 }

@@ -13,12 +13,12 @@ internal class NetChangeMonitor(context: Context) : OnNetCallback{
         onCallbackList.ifEmpty { netChangeListener.registerListener() }
 
         if (netChangeListener.isAvailable()) {
-            onNetCallback.onAvailable()
+            onNetCallback.onNetAvailable()
         } else {
-            onNetCallback.onLost()
+            onNetCallback.onNetLost()
         }
 
-        onNetCallback.onNetworkTypeChanged(NetType.None,getCurrentNetType())
+        onNetCallback.onNetTypeChanged(NetType.None,getCurrentNetType())
         onCallbackList.add(onNetCallback)
     }
 
@@ -33,15 +33,15 @@ internal class NetChangeMonitor(context: Context) : OnNetCallback{
         onCallbackList.ifEmpty { netChangeListener.unregisterListener() }
     }
 
-    override fun onAvailable() {
-        onCallbackList.forEach { it.onAvailable() }
+    override fun onNetAvailable() {
+        onCallbackList.forEach { it.onNetAvailable() }
     }
 
-    override fun onLost() {
-        onCallbackList.forEach { it.onLost() }
+    override fun onNetLost() {
+        onCallbackList.forEach { it.onNetLost() }
     }
 
-    override fun onNetworkTypeChanged(old: NetType, new: NetType) {
-        onCallbackList.forEach { it.onNetworkTypeChanged(old,new) }
+    override fun onNetTypeChanged(old: NetType, new: NetType) {
+        onCallbackList.forEach { it.onNetTypeChanged(old,new) }
     }
 }

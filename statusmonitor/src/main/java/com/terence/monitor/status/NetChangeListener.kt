@@ -77,7 +77,7 @@ internal class NetChangeListener(
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
             // 网络已连接
-            mainHandler.post { callback?.onAvailable() }
+            mainHandler.post { callback?.onNetAvailable() }
             updateNetworkType()
         }
 
@@ -85,7 +85,7 @@ internal class NetChangeListener(
         override fun onLost(network: Network) {
             super.onLost(network)
             // 网络断开连接
-            mainHandler.post { callback?.onLost() }
+            mainHandler.post { callback?.onNetLost() }
             updateNetworkType()
         }
 
@@ -95,7 +95,7 @@ internal class NetChangeListener(
             val new = getNetworkType()
             if(old != new) {
                 currentNetType = new
-                mainHandler.post { callback?.onNetworkTypeChanged(old, new) }
+                mainHandler.post { callback?.onNetTypeChanged(old, new) }
             }
         }
 

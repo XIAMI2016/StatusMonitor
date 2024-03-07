@@ -5,11 +5,11 @@ package com.terence.monitor.status
  */
 interface OnHotspotChangeCallback {
 
-    fun onDisabled()
+    fun onHotspotDisabled()
 
-    fun onEnabled()
+    fun onHotspotEnabled()
 
-    fun onDisabling()
+    fun onHotspotDisabling()
 
-    fun onEnabling()
+    fun onHotspotEnabling()
 }

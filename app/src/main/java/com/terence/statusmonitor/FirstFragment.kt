@@ -55,31 +55,31 @@ class FirstFragment : Fragment() , OnNetCallback, OnHotspotChangeCallback, OnBat
         _binding = null
     }
 
-    override fun onAvailable() {
+    override fun onNetAvailable() {
 //        Toast.makeText(requireContext(),"网络已连接，current = ${Thread.currentThread().name}",Toast.LENGTH_LONG).show()
     }
 
-    override fun onLost() {
+    override fun onNetLost() {
 //        Toast.makeText(requireContext(),"网络已断开，current = ${Thread.currentThread().name}",Toast.LENGTH_LONG).show()
     }
 
-    override fun onNetworkTypeChanged(old: NetType, new: NetType) {
+    override fun onNetTypeChanged(old: NetType, new: NetType) {
 //        Toast.makeText(requireContext(),"网络变化，old = $old,new = $new",Toast.LENGTH_LONG).show()
     }
 
-    override fun onDisabled() {
+    override fun onHotspotDisabled() {
         Toast.makeText(requireContext(),"F onDisabled", Toast.LENGTH_LONG).show()
     }
 
-    override fun onEnabled() {
+    override fun onHotspotEnabled() {
         Toast.makeText(requireContext(),"F onEnabled", Toast.LENGTH_LONG).show()
     }
 
-    override fun onDisabling() {
+    override fun onHotspotDisabling() {
         Toast.makeText(requireContext(),"F onDisabling", Toast.LENGTH_LONG).show()
     }
 
-    override fun onEnabling() {
+    override fun onHotspotEnabling() {
         Toast.makeText(requireContext(),"F onEnabling", Toast.LENGTH_LONG).show()
     }
 

@@ -16,9 +16,9 @@ internal class HotspotChangeChangeMonitor(private val context: Context) : OnHots
         onHotspotCallbackList.ifEmpty { hotspotChangeListener.registerListener() }
 
         if(hotspotChangeListener.isApEnable(context)){
-            onHotspotChangeCallback.onEnabled()
+            onHotspotChangeCallback.onHotspotEnabled()
         }else {
-            onHotspotChangeCallback.onDisabled()
+            onHotspotChangeCallback.onHotspotDisabled()
         }
 
         onHotspotCallbackList.add(onHotspotChangeCallback)
@@ -32,19 +32,19 @@ internal class HotspotChangeChangeMonitor(private val context: Context) : OnHots
     @RequiresPermission(value = "android.permission.ACCESS_WIFI_STATE")
     fun isApEnable() = hotspotChangeListener.isApEnable(context)
 
-    override fun onDisabled() {
-        onHotspotCallbackList.forEach { it.onDisabled() }
+    override fun onHotspotDisabled() {
+        onHotspotCallbackList.forEach { it.onHotspotDisabled() }
     }
 
-    override fun onEnabled() {
-        onHotspotCallbackList.forEach { it.onEnabled() }
+    override fun onHotspotEnabled() {
+        onHotspotCallbackList.forEach { it.onHotspotEnabled() }
     }
 
-    override fun onDisabling() {
-        onHotspotCallbackList.forEach { it.onDisabling() }
+    override fun onHotspotDisabling() {
+        onHotspotCallbackList.forEach { it.onHotspotDisabling() }
     }
 
-    override fun onEnabling() {
-        onHotspotCallbackList.forEach { it.onEnabling() }
+    override fun onHotspotEnabling() {
+        onHotspotCallbackList.forEach { it.onHotspotEnabling() }
     }
 }

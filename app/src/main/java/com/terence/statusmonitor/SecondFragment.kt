@@ -53,19 +53,19 @@ class SecondFragment : Fragment() , OnHotspotChangeCallback{
         _binding = null
     }
 
-    override fun onDisabled() {
+    override fun onHotspotDisabled() {
         Toast.makeText(requireContext(),"S onDisabled", Toast.LENGTH_LONG).show()
     }
 
-    override fun onEnabled() {
+    override fun onHotspotEnabled() {
         Toast.makeText(requireContext(),"S onEnabled", Toast.LENGTH_LONG).show()
     }
 
-    override fun onDisabling() {
+    override fun onHotspotDisabling() {
         Toast.makeText(requireContext(),"S onDisabling", Toast.LENGTH_LONG).show()
     }
 
-    override fun onEnabling() {
+    override fun onHotspotEnabling() {
         Toast.makeText(requireContext(),"S onEnabling", Toast.LENGTH_LONG).show()
     }
 }

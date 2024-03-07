@@ -60,19 +60,19 @@ internal class HotspotChangeListener(
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.getIntExtra("wifi_state", -1)) {
                 10 -> { //disabling
-                    callback?.onDisabling()
+                    callback?.onHotspotDisabling()
                 }
                 11 -> { //disabled
-                    callback?.onDisabled()
+                    callback?.onHotspotDisabled()
                 }
                 12 -> { //enabling
-                    callback?.onEnabling()
+                    callback?.onHotspotEnabling()
                 }
                 13 -> { //enabled
-                    callback?.onEnabled()
+                    callback?.onHotspotEnabled()
                 }
                 else -> {
-                    callback?.onDisabled()
+                    callback?.onHotspotDisabled()
                 }
             }
         }
