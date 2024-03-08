@@ -41,7 +41,7 @@ internal class NetChangeMonitor(context: Context) : OnNetCallback{
         onCallbackList.forEach { it.onNetLost() }
     }
 
-    override fun onNetTypeChanged(old: NetType, new: NetType) {
+    override fun onNetTypeChanged(old: Int, new: Int) {
         onCallbackList.forEach { it.onNetTypeChanged(old,new) }
     }
 }

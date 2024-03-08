@@ -40,9 +40,9 @@ class FirstFragment : Fragment() , OnNetCallback, OnHotspotChangeCallback, OnBat
         }
 
         StatusMonitor.bind(requireContext())
-//        StatusMonitor.addNetChangeCallback(this)
+        StatusMonitor.addNetChangeCallback(this)
 //        StatusMonitor.addHotspotCallback(this)
-        StatusMonitor.addBatteryStatusCallback(this)
+//        StatusMonitor.addBatteryStatusCallback(this)
     }
 
 
@@ -63,8 +63,14 @@ class FirstFragment : Fragment() , OnNetCallback, OnHotspotChangeCallback, OnBat
 //        Toast.makeText(requireContext(),"网络已断开，current = ${Thread.currentThread().name}",Toast.LENGTH_LONG).show()
     }
 
-    override fun onNetTypeChanged(old: NetType, new: NetType) {
-//        Toast.makeText(requireContext(),"网络变化，old = $old,new = $new",Toast.LENGTH_LONG).show()
+    override fun onNetTypeChanged(old: Int, new: Int) {
+        Toast.makeText(requireContext(),"网络变化，old = $old,new = $new",Toast.LENGTH_LONG).show()
+
+        Log.d("TAG", "onNetTypeChanged: is Mobile = ${NetType.isMobile(new)}")
+        Log.d("TAG", "onNetTypeChanged: is 4G = ${new == NetType.Mobile_4G}")
+        Log.d("TAG", "onNetTypeChanged: is 3G = ${new == NetType.Mobile_3G}")
+        Log.d("TAG", "onNetTypeChanged: is 2G = ${new == NetType.Mobile_2G}")
+
     }
 
     override fun onHotspotDisabled() {

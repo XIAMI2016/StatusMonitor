@@ -6,5 +6,9 @@ interface OnNetCallback {
 
     fun onNetLost()
 
-    fun onNetTypeChanged(old : NetType, new : NetType)
+    /**
+     * @param old [NetType]
+     * @param new [NetType]
+     */
+    fun onNetTypeChanged(old : Int, new : Int)
 }

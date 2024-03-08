@@ -47,8 +47,11 @@ object StatusMonitor {
         netChangeMonitor!!.removeCallback(onNetCallback)
     }
 
+    /**
+     * @return [NetType]
+     */
     @RequiresPermission(value = "android.permission.ACCESS_NETWORK_STATE")
-    fun getCurrentNetType(): NetType {
+    fun getCurrentNetType(): Int {
         initNetChangeMonitor()
         return netChangeMonitor!!.getCurrentNetType()
     }
