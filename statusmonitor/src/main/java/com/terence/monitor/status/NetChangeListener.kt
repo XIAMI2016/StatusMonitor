@@ -1,11 +1,12 @@
 package com.terence.monitor.status
 
+import android.content.BroadcastReceiver
 import android.content.Context
-import android.net.ConnectivityManager
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.*
 import android.net.ConnectivityManager.NetworkCallback
-import android.net.Network
-import android.net.NetworkCapabilities
-import android.net.NetworkRequest
+import android.net.wifi.WifiManager
 import android.telephony.TelephonyManager
 import androidx.annotation.RequiresPermission
 
@@ -13,19 +14,28 @@ import androidx.annotation.RequiresPermission
  *   Created by Terence.J.Tang on 2024/2/26
  */
 internal class NetChangeListener(
-    context: Context,
-    callback: OnNetCallback? = null,
+    private val context: Context,
+    private val callback: OnNetCallback? = null,
 ) : Listener{
 
     private var networkCallbackRequest = V24NetworkCallbackRequest(context.applicationContext,callback)
+    private var wifiStatusReceiver : WifiStatusReceiver?= null
 
     @RequiresPermission(value = "android.permission.ACCESS_NETWORK_STATE")
     override fun registerListener() {
         registerV24()
+
+        if(wifiStatusReceiver == null) {
+            wifiStatusReceiver = WifiStatusReceiver.buildAndRegister(context, callback)
+        }
     }
 
     override fun unregisterListener() {
         unregisterV24()
+        if(wifiStatusReceiver != null){
+            context.unregisterReceiver(wifiStatusReceiver)
+            wifiStatusReceiver = null
+        }
     }
 
     @RequiresPermission(value = "android.permission.ACCESS_NETWORK_STATE")
@@ -41,6 +51,28 @@ internal class NetChangeListener(
 
     private fun unregisterV24(){
         networkCallbackRequest.unregisterCallback()
+    }
+
+    class WifiStatusReceiver(private val callback: OnNetCallback?= null) : BroadcastReceiver() {
+
+        companion object {
+
+            fun buildAndRegister(context: Context, callback: OnNetCallback?): WifiStatusReceiver {
+                val receiver = WifiStatusReceiver(callback)
+                val filter = IntentFilter().apply {
+                    addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
+                }
+                context.registerReceiver(receiver, filter)
+                return receiver
+            }
+        }
+
+
+        override fun onReceive(context: Context, intent: Intent) {
+            val networkInfo = intent.getParcelableExtra<NetworkInfo>(WifiManager.EXTRA_NETWORK_INFO)
+            val mWifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            callback?.onWifiStateChanged(networkInfo,mWifiManager.connectionInfo)
+        }
     }
 
     class V24NetworkCallbackRequest(

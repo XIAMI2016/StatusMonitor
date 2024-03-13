@@ -1,5 +1,7 @@
 package com.terence.statusmonitor
 
+import android.net.NetworkInfo
+import android.net.wifi.WifiInfo
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -22,14 +24,24 @@ class FirstFragment : Fragment() , OnNetCallback, OnHotspotChangeCallback, OnBat
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private lateinit var statusMonitor: StatusMonitor
+
+    private val onVolumeCallback = object : OnVolumeCallback {
+        override fun onVolumeChanged(streamType: Int, volume: Int) {
+            Log.d("TAG", "onVolumeChanged: streamType = $streamType, volume = $volume")
+
+            Toast.makeText(requireContext(),"volume = $volume",Toast.LENGTH_LONG).show()
+        }
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        statusMonitor = StatusMonitor.getInstance(requireContext())
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,8 +51,10 @@ class FirstFragment : Fragment() , OnNetCallback, OnHotspotChangeCallback, OnBat
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
 
-        StatusMonitor.bind(requireContext())
-        StatusMonitor.addNetChangeCallback(this)
+        statusMonitor.addVolumeChangeCallback(onVolumeCallback)
+
+
+        statusMonitor.addNetChangeCallback(this)
 //        StatusMonitor.addHotspotCallback(this)
 //        StatusMonitor.addBatteryStatusCallback(this)
     }
@@ -48,10 +62,10 @@ class FirstFragment : Fragment() , OnNetCallback, OnHotspotChangeCallback, OnBat
 
     override fun onDestroyView() {
         super.onDestroyView()
-//        StatusMonitor.removeNetChangeCallback(this)
+        statusMonitor.removeNetChangeCallback(this)
 //        StatusMonitor.removeHotspotCallback(this)
-        StatusMonitor.removeBatteryStatusCallback(this)
-
+//        StatusMonitor.removeBatteryStatusCallback(this)
+        statusMonitor.removeVolumeChangeCallback(onVolumeCallback)
         _binding = null
     }
 
@@ -71,6 +85,10 @@ class FirstFragment : Fragment() , OnNetCallback, OnHotspotChangeCallback, OnBat
         Log.d("TAG", "onNetTypeChanged: is 3G = ${new == NetType.Mobile_3G}")
         Log.d("TAG", "onNetTypeChanged: is 2G = ${new == NetType.Mobile_2G}")
 
+    }
+
+    override fun onWifiStateChanged(networkInfo: NetworkInfo?, wifiInfo: WifiInfo) {
+        Toast.makeText(requireContext(),"网络变化，wifi = $networkInfo",Toast.LENGTH_LONG).show()
     }
 
     override fun onHotspotDisabled() {

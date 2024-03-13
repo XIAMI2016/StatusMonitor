@@ -13,6 +13,7 @@ internal class HotspotChangeChangeMonitor(private val context: Context) : OnHots
 
     @RequiresPermission(value = "android.permission.ACCESS_WIFI_STATE")
     fun addCallbackList(onHotspotChangeCallback: OnHotspotChangeCallback) {
+        if(onHotspotCallbackList.contains(onHotspotChangeCallback)) return
         onHotspotCallbackList.ifEmpty { hotspotChangeListener.registerListener() }
 
         if(hotspotChangeListener.isApEnable(context)){
@@ -25,6 +26,7 @@ internal class HotspotChangeChangeMonitor(private val context: Context) : OnHots
     }
 
     fun removeCallbackList(onHotspotChangeCallback: OnHotspotChangeCallback) {
+        if(!onHotspotCallbackList.contains(onHotspotChangeCallback)) return
         onHotspotCallbackList.remove(onHotspotChangeCallback)
         onHotspotCallbackList.ifEmpty { hotspotChangeListener.unregisterListener() }
     }

@@ -1,6 +1,8 @@
 package com.terence.statusmonitor
 
+import android.content.pm.PackageInfo
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.terence.monitor.status.OnHotspotChangeCallback
+import com.terence.monitor.status.OnPackageChangeCallback
 import com.terence.monitor.status.StatusMonitor
 import com.terence.statusmonitor.databinding.FragmentSecondBinding
 
@@ -21,6 +24,8 @@ class SecondFragment : Fragment() , OnHotspotChangeCallback{
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private lateinit var statusMonitor: StatusMonitor
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,16 +44,18 @@ class SecondFragment : Fragment() , OnHotspotChangeCallback{
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
 
-        val available = StatusMonitor.isNetAvailable()
+        statusMonitor = StatusMonitor.getInstance(requireContext())
+
+        val available = statusMonitor.isNetAvailable()
         Toast.makeText(requireContext(),"isNetworkAvailable = $available",Toast.LENGTH_LONG).show()
 
-        StatusMonitor.addHotspotCallback(this)
+        statusMonitor.addHotspotCallback(this)
 
     }
 
 
     override fun onDestroyView() {
-        StatusMonitor.removeHotspotCallback(this)
+        statusMonitor.removeHotspotCallback(this)
         super.onDestroyView()
         _binding = null
     }

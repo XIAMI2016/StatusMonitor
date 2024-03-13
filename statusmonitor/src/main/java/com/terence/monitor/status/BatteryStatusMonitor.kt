@@ -11,6 +11,7 @@ internal class BatteryStatusMonitor(context: Context) : OnBatteryStatusCallback 
     private val onCallbackList = mutableListOf<OnBatteryStatusCallback>()
 
     fun addCallback(onBatteryStatusCallback: OnBatteryStatusCallback){
+        if(onCallbackList.contains(onBatteryStatusCallback)) return
         onCallbackList.ifEmpty { batteryStatusListener.registerListener() }
 
         onBatteryStatusCallback.onBatteryVoltageChange(batteryStatusListener.getMilliVolt())
@@ -23,6 +24,7 @@ internal class BatteryStatusMonitor(context: Context) : OnBatteryStatusCallback 
     }
 
     fun removeCallback(onBatteryStatusCallback: OnBatteryStatusCallback){
+        if(!onCallbackList.contains(onBatteryStatusCallback)) return
         onCallbackList.remove(onBatteryStatusCallback)
         onCallbackList.ifEmpty { batteryStatusListener.unregisterListener() }
     }

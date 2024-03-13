@@ -1,6 +1,8 @@
 package com.terence.monitor.status
 
 import android.content.Context
+import android.net.NetworkInfo
+import android.net.wifi.WifiInfo
 import androidx.annotation.RequiresPermission
 
 internal class NetChangeMonitor(context: Context) : OnNetCallback{
@@ -10,6 +12,7 @@ internal class NetChangeMonitor(context: Context) : OnNetCallback{
 
     @RequiresPermission(value = "android.permission.ACCESS_NETWORK_STATE")
     fun addCallback(onNetCallback: OnNetCallback){
+        if(onCallbackList.contains(onNetCallback)) return
         onCallbackList.ifEmpty { netChangeListener.registerListener() }
 
         if (netChangeListener.isAvailable()) {
@@ -29,6 +32,7 @@ internal class NetChangeMonitor(context: Context) : OnNetCallback{
     fun isAvailable() = netChangeListener.isAvailable()
 
     fun removeCallback(onNetCallback: OnNetCallback){
+        if(!onCallbackList.contains(onNetCallback)) return
         onCallbackList.remove(onNetCallback)
         onCallbackList.ifEmpty { netChangeListener.unregisterListener() }
     }
@@ -43,5 +47,9 @@ internal class NetChangeMonitor(context: Context) : OnNetCallback{
 
     override fun onNetTypeChanged(old: Int, new: Int) {
         onCallbackList.forEach { it.onNetTypeChanged(old,new) }
+    }
+
+    override fun onWifiStateChanged(networkInfo: NetworkInfo?, wifiInfo: WifiInfo) {
+        onCallbackList.forEach { it.onWifiStateChanged(networkInfo, wifiInfo) }
     }
 }
